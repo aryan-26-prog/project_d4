@@ -11,6 +11,8 @@ const confessionRouter = require("./routes/confessionRouter");
 const app = express();
 const server = http.createServer(app);
 
+//This used to fix buffering
+mongoose.set("bufferCommands", false);
 
 //Socket.io setup for realtime
 const io = new Server(server, {
@@ -43,20 +45,23 @@ app.use(express.json());
 
 
 //Database Connections
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch(error => console.log("MongoDB connection error", error));
-
-
-//Adding Routes
-app.use("/api/confessions", confessionRouter);
-
-app.get("/", (req, res) => {
-  res.send("Anonymous Confession Backend is running");
-});
-
-
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected");
+
+    // Routes 
+    app.use("/api/confessions", confessionRouter);
+
+    app.get("/", (req, res) => {
+      res.send("Anonymous Confession Backend is running");
+    });
+
+    server.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB connection error:", error);
+  });

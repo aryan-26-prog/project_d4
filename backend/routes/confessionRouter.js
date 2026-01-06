@@ -18,12 +18,20 @@ confessionRouter.patch("/:id/react/:type", reactToConfession);
 
 //This router is used to sort the trending one
 confessionRouter.get("/trending", async (req, res) => {
-  const trending = await Confession.find()
-    .sort({ likes: -1 })
-    .limit(20);
+  try {
+    const trending = await Confession.find()
+      .sort({ likes: -1 })
+      .limit(20);
 
-  res.json(trending);
+    res.json(trending);
+  } catch (error) {
+    console.error("Trending fetch error:", error);
+    res.status(500).json({
+      error: "Failed to fetch trending confessions"
+    });
+  }
 });
+
 
 
 module.exports = confessionRouter;
