@@ -1232,6 +1232,7 @@ body {
    ==================== */
 .trending-sidebar {
   position: sticky;
+  margin-top: 30px;
   top: 2rem;
   background: rgba(30, 30, 30, 0.8);
   border-radius: 24px;
@@ -1360,6 +1361,61 @@ body {
   border-radius: 12px;
   font-size: 0.7rem;
   font-weight: 600;
+}
+
+/* Trending Badge Styles */
+.trending-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  background: linear-gradient(135deg, #f56565 0%, #ed8936 100%);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Pulse animation for trending badge */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Card header adjustment */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .card-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .interactions {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .reaction-buttons {
+    margin-left: 0;
+    justify-content: center;
+    width: 100%;
+  }
 }
 
 /* Theme Selector */
@@ -1944,86 +2000,9 @@ body {
   transform: translateY(-1px);
 }
 
-
-
-/* Community Stats */
-.stats-card {
-  background: var(--theme-surface);
-  border-radius: 24px;
-  padding: 2rem;
-  border: 1px solid var(--theme-border);
-  box-shadow: var(--theme-shadow);
-}
-
-.stats-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--theme-border);
-}
-
-.stats-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: var(--theme-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.stats-icon {
-  color: #fbbf24;
-}
-
-.stats-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.stat-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 16px;
-  border: 1px solid var(--theme-border);
-  transition: all 0.3s ease;
-}
-
-.stat-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  transform: translateX(5px);
-  border-color: var(--theme-primary);
-}
-
-.stat-label {
-  color: var(--theme-text-secondary);
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-.stat-value {
-  font-weight: 700;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.love-stat {
-  color: #ec4899;
-}
-
-.time-stat {
-  color: #3b82f6;
-}
-
 /* Quick Tips */
 .tips-card {
+  margin-top: 30px;
   background: var(--theme-surface);
   border-radius: 24px;
   padding: 2rem;

@@ -244,29 +244,8 @@ function App() {
                 </div>
                 <ConfessionList />
               </div>
+              <TrendingSidebar></TrendingSidebar>
             </div>
-
-              {/* Community Stats */}
-              <div className="glass p-6 rounded-3xl mb-8">
-                <h3 className="text-xl font-bold mb-4 gradient-text flex items-center gap-2">
-                  <FiAward />
-                  Community Stats
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-white/5">
-                    <span className="opacity-70">Most Active Time</span>
-                    <span className="font-semibold">9 PM - 12 AM</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-white/5">
-                    <span className="opacity-70">Popular Category</span>
-                    <span className="font-semibold text-purple-400">Love 💖</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-white/5">
-                    <span className="opacity-70">Avg. Response Time</span>
-                    <span className="font-semibold">2.4 mins ⚡</span>
-                  </div>
-                </div>
-              </div>
 
               {/* Quick Tips */}
               <div className="tips-card glass glass-hover mb-8">
