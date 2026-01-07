@@ -45,15 +45,26 @@ export const SocketProvider = ({ children }) => {
       });
     });
 
+    // ✅ YAHAN ADD KARNA HAI (line 42-58)
     newSocket.on('update_likes', (updatedConfession) => {
       console.log('❤️ Like update received:', updatedConfession);
+      
+      // ✅ CORRECTED: Proper state update
       setConfessions(prev =>
         prev.map(conf =>
           conf._id === updatedConfession._id
-            ? { ...conf, likes: updatedConfession.likes }
+            ? { 
+                ...conf, 
+                likes: updatedConfession.likes,
+                reactions: updatedConfession.reactions || conf.reactions
+              }
             : conf
         )
       );
+      
+      toast.success('Someone liked a confession! ❤️', {
+        duration: 2000,
+      });
     });
 
     newSocket.on('reaction_update', (updatedConfession) => {
@@ -61,7 +72,10 @@ export const SocketProvider = ({ children }) => {
       setConfessions(prev =>
         prev.map(conf =>
           conf._id === updatedConfession._id
-            ? { ...conf, reactions: updatedConfession.reactions }
+            ? { 
+                ...conf, 
+                reactions: updatedConfession.reactions 
+              }
             : conf
         )
       );
@@ -82,6 +96,11 @@ export const SocketProvider = ({ children }) => {
 
     newSocket.on('error', (error) => {
       console.error('Socket error:', error);
+    });
+
+    // ✅ Debugging के लिए (optional)
+    newSocket.onAny((event, ...args) => {
+      console.log(`📡 Socket Event [${event}]:`, args);
     });
 
     setSocket(newSocket);

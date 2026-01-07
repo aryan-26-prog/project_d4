@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSocket } from '../context/SocketContext';
 import { confessionAPI } from '../services/api';
 import ConfessionCard from './ConfessionCard';
@@ -8,6 +8,7 @@ import '../styles/App.css';
 
 const ConfessionList = () => {
   const { confessions, setConfessions } = useSocket();
+  const [filteredConfessions, setFilteredConfessions] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState('latest');
@@ -15,6 +16,24 @@ const ConfessionList = () => {
   useEffect(() => {
     fetchConfessions();
   }, []);
+
+  useEffect(() => {
+    let filtered = [...confessions];
+    
+    // Filter by category
+    if (selectedCategory !== 'All') {
+      filtered = filtered.filter(conf => conf.category === selectedCategory);
+    }
+    
+    // Sort
+    if (sortBy === 'latest') {
+      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (sortBy === 'popular') {
+      filtered.sort((a, b) => b.likes - a.likes);
+    }
+    
+    setFilteredConfessions(filtered);
+  }, [confessions, selectedCategory, sortBy]);
 
   const fetchConfessions = async () => {
     try {
@@ -28,21 +47,9 @@ const ConfessionList = () => {
     }
   };
 
-  const filteredConfessions = useMemo(() => {
-    let data = [...confessions];
-
-    if (selectedCategory !== 'All') {
-      data = data.filter(conf => conf.category === selectedCategory);
-    }
-
-    if (sortBy === 'latest') {
-      data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    } else {
-      data.sort((a, b) => b.likes - a.likes);
-    }
-
-    return data;
-  }, [confessions, selectedCategory, sortBy]);
+  const handleRefresh = () => {
+    fetchConfessions();
+  };
 
   const categories = ['All', 'General', 'Love', 'College', 'Career', 'Family', 'Mental Health'];
 
@@ -58,15 +65,24 @@ const ConfessionList = () => {
   return (
     <div className="confession-list">
       <div className="list-header">
-        <h2>Latest Confessions</h2>
-
-        <div>
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <div className="header-left">
+          <h2>Latest Confessions</h2>
+          <span className="confession-count">
+            {filteredConfessions.length} confessions
+          </span>
+        </div>
+        
+        <div className="header-right">
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="sort-select"
+          >
             <option value="latest">Latest</option>
             <option value="popular">Most Popular</option>
           </select>
-
-          <button onClick={fetchConfessions}>
+          
+          <button onClick={handleRefresh} className="refresh-btn">
             <FiRefreshCw />
           </button>
         </div>
@@ -82,11 +98,12 @@ const ConfessionList = () => {
         <div className="empty-state">
           <FiInbox size={48} />
           <h3>No confessions yet</h3>
+          <p>Be the first to share your thoughts!</p>
         </div>
       ) : (
         <div className="confessions-grid">
-          {filteredConfessions.map(conf => (
-            <ConfessionCard key={conf._id} confession={conf} />
+          {filteredConfessions.map((confession) => (
+            <ConfessionCard key={confession._id} confession={confession} />
           ))}
         </div>
       )}

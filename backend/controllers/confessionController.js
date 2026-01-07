@@ -77,11 +77,11 @@ exports.likeConfession = async (req, res) => {
     }
 
     confession.likes += 1;
-    await confession.save();
+    const updatedConfession = await confession.save();
 
-    //Used socket.io for realtime like updates
-    req.io.emit("update_likes", confession);
-    return res.status(201).json(confession)
+    // Broadcast to ALL connected clients
+    req.io.emit("update_likes", updatedConfession);
+    return res.status(200).json(updatedConfession);
 
   }
   catch(error) {
