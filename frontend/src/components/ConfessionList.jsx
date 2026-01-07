@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSocket } from '../context/SocketContext';
 import { confessionAPI } from '../services/api';
 import ConfessionCard from './ConfessionCard';
@@ -7,11 +7,49 @@ import { FiRefreshCw, FiInbox } from 'react-icons/fi';
 import '../styles/App.css';
 
 const ConfessionList = () => {
-  const { confessions, setConfessions } = useSocket();
+  const { socket, confessions, setConfessions } = useSocket();
   const [filteredConfessions, setFilteredConfessions] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState('latest');
+
+  // ✅ Add socket listeners in ConfessionList itself
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleLikeUpdate = (updatedConfession) => {
+      console.log('Like update in ConfessionList:', updatedConfession);
+      
+      setConfessions(prev => {
+        const updated = prev.map(conf => 
+          conf._id === updatedConfession._id 
+            ? { ...conf, likes: updatedConfession.likes }
+            : conf
+        );
+        
+        // Force update by creating new array
+        return [...updated];
+      });
+    };
+
+    const handleReactionUpdate = (updatedConfession) => {
+      setConfessions(prev => 
+        prev.map(conf => 
+          conf._id === updatedConfession._id 
+            ? { ...conf, reactions: updatedConfession.reactions }
+            : conf
+        )
+      );
+    };
+
+    socket.on('update_likes', handleLikeUpdate);
+    socket.on('reaction_update', handleReactionUpdate);
+
+    return () => {
+      socket.off('update_likes', handleLikeUpdate);
+      socket.off('reaction_update', handleReactionUpdate);
+    };
+  }, [socket, setConfessions]);
 
   useEffect(() => {
     fetchConfessions();
@@ -20,12 +58,10 @@ const ConfessionList = () => {
   useEffect(() => {
     let filtered = [...confessions];
     
-    // Filter by category
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(conf => conf.category === selectedCategory);
     }
     
-    // Sort
     if (sortBy === 'latest') {
       filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     } else if (sortBy === 'popular') {
@@ -103,7 +139,12 @@ const ConfessionList = () => {
       ) : (
         <div className="confessions-grid">
           {filteredConfessions.map((confession) => (
-            <ConfessionCard key={confession._id} confession={confession} />
+            <ConfessionCard 
+              key={confession._id} 
+              confession={confession}
+              // ✅ Pass socket as prop for better updates
+              socket={socket}
+            />
           ))}
         </div>
       )}

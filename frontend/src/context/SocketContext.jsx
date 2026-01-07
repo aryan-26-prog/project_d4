@@ -18,7 +18,6 @@ export const SocketProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    // This is used to make the connection between the socket and vite
     const socketUrl = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
     
     console.log('Connecting to socket server at:', socketUrl);
@@ -45,11 +44,9 @@ export const SocketProvider = ({ children }) => {
       });
     });
 
-    // ✅ FIXED: Proper ID comparison
     newSocket.on('update_likes', (updatedConfession) => {
       console.log('❤️ Like update received:', updatedConfession);
       
-      // Convert IDs to string for comparison
       const updatedId = updatedConfession._id?.toString();
       
       setConfessions(prev => {
@@ -66,7 +63,6 @@ export const SocketProvider = ({ children }) => {
           return conf;
         });
         
-        // Log for debugging
         const changed = JSON.stringify(prev) !== JSON.stringify(updated);
         console.log('State updated?', changed);
         
@@ -114,7 +110,6 @@ export const SocketProvider = ({ children }) => {
       console.error('Socket error:', error);
     });
 
-    // ✅ Debugging के लिए
     newSocket.onAny((event, ...args) => {
       console.log(`📡 Socket Event [${event}]:`, args);
     });
@@ -131,7 +126,7 @@ export const SocketProvider = ({ children }) => {
     socket,
     confessions,
     setConfessions,
-    isConnected,
+    isConnected, // ✅ isConnected को export किया
   };
 
   return (
