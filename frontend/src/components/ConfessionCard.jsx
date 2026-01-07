@@ -1,95 +1,148 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { confessionAPI } from '../services/api';
-import toast from 'react-hot-toast';
-import ReactionButtons from './ReactionButtons';
-import {
-  FiHeart,
-  FiMessageCircle,
-  FiCalendar,
-  FiTrendingUp,
+import { 
+  FiHeart, 
+  FiFrown, 
+  FiSmile, 
+  FiMeh,
+  FiZap,
+  FiThumbsUp 
 } from 'react-icons/fi';
-import '../styles/App.css';
 
-const ConfessionCard = ({ confession }) => {
+const ConfessionCard = ({ confession: initialConfession, socket }) => {
+  const [confession, setConfession] = useState(initialConfession);
   const [isLiking, setIsLiking] = useState(false);
-  const [localLikes, setLocalLikes] = useState(confession.likes);
+  const [isReacting, setIsReacting] = useState('');
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
+  // Listen for updates directly in card
+  useEffect(() => {
+    if (!socket) return;
 
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    return date.toLocaleDateString();
-  };
+    const handleUpdate = (updatedConfession) => {
+      const updatedId = updatedConfession._id?.toString();
+      const confId = confession._id?.toString();
+      
+      if (updatedId === confId) {
+        console.log('ConfessionCard: Updating', confId);
+        setConfession(prev => ({
+          ...prev,
+          likes: updatedConfession.likes || prev.likes,
+          reactions: updatedConfession.reactions || prev.reactions
+        }));
+      }
+    };
+
+    socket.on('update_likes', handleUpdate);
+    socket.on('reaction_update', handleUpdate);
+
+    return () => {
+      socket.off('update_likes', handleUpdate);
+      socket.off('reaction_update', handleUpdate);
+    };
+  }, [socket, confession._id]);
+
+  // Update if initial confession prop changes
+  useEffect(() => {
+    setConfession(initialConfession);
+  }, [initialConfession]);
 
   const handleLike = async () => {
     if (isLiking) return;
-
-    setIsLiking(true);
-    setLocalLikes(prev => prev + 1);
-
+    
     try {
+      setIsLiking(true);
       await confessionAPI.like(confession._id);
+      
+      // Optimistic update
+      setConfession(prev => ({
+        ...prev,
+        likes: prev.likes + 1
+      }));
     } catch (error) {
-      setLocalLikes(prev => prev - 1);
-      toast.error('Failed to like confession');
+      console.error('Like error:', error);
     } finally {
       setIsLiking(false);
     }
   };
 
-  const categoryColors = {
-    'General': '#667eea',
-    'Love': '#f56565',
-    'College': '#48bb78',
-    'Career': '#ed8936',
-    'Family': '#9f7aea',
-    'Mental Health': '#4299e1',
+  const handleReaction = async (type) => {
+    if (isReacting) return;
+    
+    try {
+      setIsReacting(type);
+      await confessionAPI.react(confession._id, type);
+      
+      // Optimistic update
+      setConfession(prev => ({
+        ...prev,
+        reactions: {
+          ...prev.reactions,
+          [type]: (prev.reactions[type] || 0) + 1
+        }
+      }));
+    } catch (error) {
+      console.error('Reaction error:', error);
+    } finally {
+      setIsReacting('');
+    }
+  };
+
+  // Ensure reactions object exists
+  const reactions = confession.reactions || {
+    shock: 0,
+    laugh: 0,
+    sad: 0,
+    wow: 0
+  };
+
+  const reactionIcons = {
+    shock: { icon: <FiZap />, label: 'Shock', color: '#FF6B35' },
+    laugh: { icon: <FiSmile />, label: 'Laugh', color: '#FFD166' },
+    sad: { icon: <FiFrown />, label: 'Sad', color: '#118AB2' },
+    wow: { icon: <FiMeh />, label: 'Wow', color: '#EF476F' }
   };
 
   return (
     <div className="confession-card">
       <div className="card-header">
-        <div className="category-badge" style={{ backgroundColor: categoryColors[confession.category] }}>
-          {confession.category}
-        </div>
-        <div className="timestamp">
-          <FiCalendar /> {formatDate(confession.createdAt)}
-        </div>
+        <span className="category-badge">{confession.category}</span>
+        <span className="timestamp">
+          {new Date(confession.createdAt).toLocaleDateString()}
+        </span>
       </div>
-
-      <div className="confession-text">
-        <p>{confession.text}</p>
-      </div>
-
+      
+      <p className="confession-text">{confession.text}</p>
+      
       <div className="card-footer">
-        <div className="interactions">
-          <button
-            onClick={handleLike}
-            disabled={isLiking}
-            className={`like-btn ${isLiking ? 'liking' : ''}`}
-          >
-            <FiHeart className={isLiking ? 'heart-animate' : ''} />
-            <span>{localLikes}</span>
-          </button>
-
-          <div className="trending-indicator">
-            {confession.likes >= 10 && (
-              <span className="trending-badge">
-                <FiTrendingUp /> Trending
-              </span>
-            )}
+        {/* Like Button */}
+        <button 
+          onClick={handleLike} 
+          className={`like-btn ${isLiking ? 'loading' : ''}`}
+          disabled={isLiking}
+        >
+          <FiHeart className={confession.likes > 0 ? 'liked' : ''} />
+          <span>{confession.likes || 0}</span>
+        </button>
+        
+        {/* Reactions */}
+        <div className="reactions-container">
+          <div className="reactions-label">Reactions:</div>
+          <div className="reactions-buttons">
+            {Object.entries(reactionIcons).map(([type, { icon, label, color }]) => (
+              <button
+                key={type}
+                onClick={() => handleReaction(type)}
+                className={`reaction-btn ${isReacting === type ? 'active' : ''}`}
+                disabled={isReacting}
+                style={{ '--reaction-color': color }}
+                title={label}
+              >
+                {icon}
+                <span className="reaction-count">{reactions[type] || 0}</span>
+              </button>
+            ))}
           </div>
         </div>
-
-        <ReactionButtons confessionId={confession._id} initialReactions={confession.reactions} />
       </div>
     </div>
   );
