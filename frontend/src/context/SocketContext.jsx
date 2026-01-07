@@ -45,7 +45,7 @@ export const SocketProvider = ({ children }) => {
       });
     });
 
-    newSocket.on('Update confession likes', (updatedConfession) => {
+    newSocket.on('update_likes', (updatedConfession) => {
       console.log('❤️ Like update received:', updatedConfession);
       setConfessions(prev =>
         prev.map(conf =>
