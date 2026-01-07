@@ -1,67 +1,85 @@
-🕊️ Anonymous Confessions
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Anonymous Confessions</title>
+</head>
 
-Speak Freely. Stay Anonymous.
+<body>
 
-🌐 Live Application: https://confessions-tau.vercel.app/
+<h1>🕊️ Anonymous Confessions</h1>
+<p><em>Speak Freely. Stay Anonymous.</em></p>
 
-📌 Overview
+<p>
+  🌐 <strong>Live Application:</strong>
+  <a href="https://confessions-tau.vercel.app/" target="_blank">
+    https://confessions-tau.vercel.app/
+  </a>
+</p>
 
-Anonymous Confessions is a real-time, privacy-first web platform that allows users to share thoughts, emotions, and experiences anonymously in a safe and judgment-free environment.
+<hr />
 
-The application focuses on real-time synchronization, user anonymity, and clean system architecture, making it suitable for both production use and portfolio demonstration.
+<h2>📌 Overview</h2>
+<p>
+  <strong>Anonymous Confessions</strong> is a real-time, privacy-first web platform
+  that allows users to share thoughts, emotions, and experiences <strong>anonymously</strong>
+  in a safe and judgment-free environment.
+</p>
 
-✨ Key Features
+<p>
+  The application focuses on <strong>real-time synchronization</strong>,
+  <strong>user anonymity</strong>, and <strong>clean system architecture</strong>,
+  making it suitable for both production use and portfolio demonstration.
+</p>
 
-🕶️ Complete Anonymity – No login, no identity tracking
+<hr />
 
-⚡ Real-Time Updates – Confessions, likes & reactions sync instantly
+<h2>✨ Key Features</h2>
+<ul>
+  <li>🕶️ <strong>Complete Anonymity</strong> – No login, no identity tracking</li>
+  <li>⚡ <strong>Real-Time Updates</strong> – Confessions, likes & reactions sync instantly</li>
+  <li>❤️ <strong>Likes & Emoji Reactions</strong> – Express support without comments</li>
+  <li>🗂️ <strong>Category-Based Filtering</strong> – General, Love, College, Career, Family, Mental Health</li>
+  <li>🔥 <strong>Trending Confessions</strong> – Most popular posts highlighted dynamically</li>
+  <li>🧠 <strong>Mental Health Awareness</strong> – Built-in support messaging</li>
+  <li>🎨 <strong>Modern Glassmorphism UI</strong> – Clean, responsive dark theme</li>
+  <li>🌍 <strong>Multi-Device Sync</strong> – Works seamlessly across devices</li>
+</ul>
 
-❤️ Likes & Emoji Reactions – Express support without comments
+<hr />
 
-🗂️ Category-Based Filtering – General, Love, College, Career, Family, Mental Health
+<h2>🛠️ Technology Stack</h2>
 
-🔥 Trending Confessions – Most popular posts highlighted dynamically
+<h3>🎨 Frontend</h3>
+<ul>
+  <li>⚛️ React (Vite)</li>
+  <li>🎨 Custom CSS (Glassmorphism UI)</li>
+  <li>🔌 Socket.IO Client</li>
+  <li>🌐 Axios</li>
+  <li>🍞 React Hot Toast</li>
+</ul>
 
-🧠 Mental Health Awareness – Built-in support messaging
+<h3>🧩 Backend</h3>
+<ul>
+  <li>🟢 Node.js</li>
+  <li>🚂 Express.js</li>
+  <li>🍃 MongoDB with Mongoose</li>
+  <li>🔌 Socket.IO</li>
+  <li>🧹 Profanity Filtering Middleware</li>
+</ul>
 
-🎨 Modern Glassmorphism UI – Clean, responsive dark theme
+<h3>☁️ Infrastructure</h3>
+<ul>
+  <li>🌐 Frontend: Vercel</li>
+  <li>🛢️ Backend: Render</li>
+  <li>☁️ Database: MongoDB Atlas</li>
+</ul>
 
-🌍 Multi-Device Sync – Works seamlessly across devices
+<hr />
 
-🛠️ Technology Stack
-🎨 Frontend
+<h2>🧠 System Architecture</h2>
 
-⚛️ React (Vite)
-
-🎨 Custom CSS (Glassmorphism UI)
-
-🔌 Socket.IO Client
-
-🌐 Axios
-
-🍞 React Hot Toast
-
-🧩 Backend
-
-🟢 Node.js
-
-🚂 Express.js
-
-🍃 MongoDB with Mongoose
-
-🔌 Socket.IO
-
-🧹 Profanity Filtering Middleware
-
-☁️ Infrastructure
-
-🌐 Frontend: Vercel
-
-🛢️ Backend: Render
-
-☁️ Database: MongoDB Atlas
-
-🧠 System Architecture
+<pre>
 User Action (Post / Like / React)
         ↓
 REST API (MongoDB Persistence)
@@ -69,13 +87,19 @@ REST API (MongoDB Persistence)
 Socket.IO Event Emission
         ↓
 Real-Time Update Across All Clients
+</pre>
 
+<ul>
+  <li>✅ No manual refresh required</li>
+  <li>✅ Single source of truth</li>
+  <li>✅ Consistent state across devices</li>
+</ul>
 
-✅ No manual refresh required
-✅ Single source of truth
-✅ Consistent state across devices
+<hr />
 
-📂 Project Structure
+<h2>📂 Project Structure</h2>
+
+<pre>
 anonymous-confessions/
 ├── frontend/
 │   ├── components/
@@ -91,67 +115,69 @@ anonymous-confessions/
 │   └── server.js
 │
 └── README.md
-🔄 Core Functionalities
+</pre>
 
-📥 Fetch confessions via REST API
+<hr />
 
-🔁 Real-time synchronization using WebSockets
+<h2>🔄 Core Functionalities</h2>
+<ul>
+  <li>📥 Fetch confessions via REST API</li>
+  <li>🔁 Real-time synchronization using WebSockets</li>
+  <li>❤️ Live likes & emoji reactions</li>
+  <li>🗂️ Category filtering & popularity sorting</li>
+  <li>🔥 Trending confessions logic</li>
+  <li>🚫 Profanity filtering for content safety</li>
+</ul>
 
-❤️ Live likes & emoji reactions
+<hr />
 
-🗂️ Category filtering & popularity sorting
+<h2>🔒 Privacy & Safety</h2>
+<ul>
+  <li>🚫 No authentication required</li>
+  <li>🧾 No personal data stored</li>
+  <li>🧼 Automatic profanity filtering</li>
+  <li>🧠 Mental health support prompts included</li>
+</ul>
 
-🔥 Trending confessions logic
+<p><strong>⚠️ Note:</strong> This platform is not a substitute for professional mental health services.</p>
 
-🚫 Profanity filtering for content safety
+<hr />
 
-🔒 Privacy & Safety
+<h2>📈 Scalability & Design Decisions</h2>
+<ul>
+  <li>🔌 WebSocket-based real-time architecture</li>
+  <li>🧠 Context-based global state management</li>
+  <li>🔁 Derived state handled safely to avoid stale UI</li>
+  <li>🧩 Clear separation between REST APIs & sockets</li>
+  <li>♻️ Stateless backend design</li>
+</ul>
 
-🚫 No authentication required
+<hr />
 
-🧾 No personal data stored
+<h2>🚀 Future Enhancements</h2>
+<ul>
+  <li>🔐 Per-device interaction limits</li>
+  <li>🚨 Reporting & moderation dashboard</li>
+  <li>📊 Analytics panel for trends</li>
+  <li>🌍 Multi-language support</li>
+  <li>🧵 Optional anonymous discussions</li>
+</ul>
 
-🧼 Automatic profanity filtering
+<hr />
 
-🧠 Mental health support prompts included
+<h2>🧪 Local Development</h2>
 
-⚠️ This platform is not a substitute for professional mental health services.
+<h3>✅ Prerequisites</h3>
+<ul>
+  <li>Node.js (v18+)</li>
+  <li>MongoDB Atlas account</li>
+</ul>
 
-📈 Scalability & Design Decisions
+<h3>⚙️ Setup Instructions</h3>
 
-🔌 WebSocket-based real-time architecture
-
-🧠 Context-based global state management
-
-🔁 Derived state handled safely to avoid stale UI
-
-🧩 Clear separation between REST APIs & sockets
-
-♻️ Stateless backend design
-
-🚀 Future Enhancements
-
-🔐 Per-device interaction limits
-
-🚨 Reporting & moderation dashboard
-
-📊 Analytics panel for trends
-
-🌍 Multi-language support
-
-🧵 Optional anonymous discussions
-
-🧪 Local Development
-✅ Prerequisites
-
-Node.js (v18+)
-
-MongoDB Atlas account
-
-⚙️ Setup Instructions
+<pre>
 # Clone repository
-
-git clone <repository-url>
+git clone &lt;repository-url&gt;
 
 # Backend setup
 cd backend
@@ -162,27 +188,45 @@ npm run dev
 cd frontend
 npm install
 npm run dev
+</pre>
 
+<p>Create a <code>.env</code> file inside <code>backend</code>:</p>
 
-Create a .env file inside backend:
-
+<pre>
 MONGO_URI=your_mongodb_connection_string
 PORT=5000
+</pre>
 
-📄 License
+<hr />
 
-📜 This project is licensed under the MIT License.
+<h2>📄 License</h2>
+<p>📜 This project is licensed under the <strong>MIT License</strong>.</p>
 
-👨‍💻 Author
+<hr />
 
-Aryan Dhiman
-Full Stack Developer
+<h2>👨‍💻 Author</h2>
+<p>
+  <strong>Aryan Dhiman</strong><br />
+  Full Stack Developer<br />
+  🌐 Live Project:
+  <a href="https://confessions-tau.vercel.app/" target="_blank">
+    https://confessions-tau.vercel.app/
+  </a>
+</p>
 
-🌐 Live Project: https://confessions-tau.vercel.app/
+<hr />
 
-⭐ Closing Note
+<h2>⭐ Closing Note</h2>
+<p>
+  Anonymous Confessions showcases a <strong>production-ready real-time system</strong>
+  with strong emphasis on <strong>privacy, performance, and user experience</strong>.
+</p>
+<p>
+  Ideal for <strong>portfolios, hackathons, and real-world anonymous platforms</strong>.
+</p>
+<p>
+  ⭐ If you like this project, don’t forget to star the repository — it really helps!
+</p>
 
-Anonymous Confessions showcases a production-ready real-time system with strong emphasis on privacy, performance, and user experience.
-Ideal for portfolios, hackathons, and real-world anonymous platforms.
-
-If you like this project, don’t forget to ⭐ the repository — it really helps!
+</body>
+</html>
