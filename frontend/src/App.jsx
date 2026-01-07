@@ -111,20 +111,17 @@ function App() {
         </div>
 
         {/* Top Navigation Bar */}
-        <nav className="fixed top-0 left-0 right-0 z-50 p-4 glass">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
                 <span className="text-xl">🎭</span>
               </div>
-              <h1 className="text-2xl font-bold gradient-text">
+              <h1 className="text-5xl font-bold gradient-text">
                 Anonymous Confessions
               </h1>
             </div>
-
-            <div className="flex items-center gap-4">
-              {/* Theme Selector - Simplified */}
-              <div className="theme-selector-container">
+            {/* Theme Selector - Simplified */}
+              <div className="theme-selector-container ">
                 <button
                   onClick={() => setShowThemeSelector(!showThemeSelector)}
                   className="theme-btn"
@@ -181,9 +178,8 @@ function App() {
                   </div>
                 )}
               </div>
-            </div>
-          </div>
-        </nav>
+           </div>
+          
 
         {/* Main Content */}
         <div className="pt-24 pb-12 px-4 max-w-7xl mx-auto">
@@ -250,13 +246,6 @@ function App() {
               </div>
             </div>
 
-            {/* Right Column */}
-            <div className="lg:w-1/3">
-              {/* Trending Sidebar */}
-              <div className="mb-8">
-                <TrendingSidebar />
-              </div>
-
               {/* Community Stats */}
               <div className="glass p-6 rounded-3xl mb-8">
                 <h3 className="text-xl font-bold mb-4 gradient-text flex items-center gap-2">
@@ -321,7 +310,6 @@ function App() {
                   <div className="support-note">Click to view resources</div>
                 </button>
               </div>
-            </div>
           </div>
         </div>
 
