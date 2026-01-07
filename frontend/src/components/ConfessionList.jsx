@@ -7,11 +7,36 @@ import { FiRefreshCw, FiInbox } from 'react-icons/fi';
 import '../styles/App.css';
 
 const ConfessionList = () => {
-  const { confessions, setConfessions } = useSocket();
+  const { socket, confessions, setConfessions } = useSocket();
   const [filteredConfessions, setFilteredConfessions] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState('latest');
+
+  // ✅ Add additional socket listener for safety
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleLikeUpdate = (updatedConfession) => {
+      console.log('ConfessionList: Received like update', updatedConfession);
+      
+      // Force state update by creating new array
+      setConfessions(prev => {
+        const updated = prev.map(conf => 
+          conf._id?.toString() === updatedConfession._id?.toString()
+            ? { ...conf, likes: updatedConfession.likes }
+            : conf
+        );
+        return [...updated]; // New array reference
+      });
+    };
+
+    socket.on('update_likes', handleLikeUpdate);
+
+    return () => {
+      socket.off('update_likes', handleLikeUpdate);
+    };
+  }, [socket, setConfessions]);
 
   useEffect(() => {
     fetchConfessions();
@@ -20,12 +45,10 @@ const ConfessionList = () => {
   useEffect(() => {
     let filtered = [...confessions];
     
-    // Filter by category
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(conf => conf.category === selectedCategory);
     }
     
-    // Sort
     if (sortBy === 'latest') {
       filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     } else if (sortBy === 'popular') {
@@ -33,6 +56,12 @@ const ConfessionList = () => {
     }
     
     setFilteredConfessions(filtered);
+    
+    // Debug: Check if confessions have IDs
+    console.log('ConfessionList: Confessions updated', confessions.length);
+    if (confessions.length > 0) {
+      console.log('First confession ID:', confessions[0]._id, 'Type:', typeof confessions[0]._id);
+    }
   }, [confessions, selectedCategory, sortBy]);
 
   const fetchConfessions = async () => {
@@ -64,6 +93,18 @@ const ConfessionList = () => {
 
   return (
     <div className="confession-list">
+      {/* Debug info - remove after testing */}
+      <div style={{ 
+        background: '#f0f0f0', 
+        padding: '10px', 
+        marginBottom: '20px',
+        borderRadius: '8px',
+        fontSize: '12px'
+      }}>
+        <p>Debug: {confessions.length} confessions | Socket: {isConnected ? 'Connected' : 'Disconnected'}</p>
+        <p>First confession ID: {confessions[0]?._id?.toString().substring(0, 10)}...</p>
+      </div>
+      
       <div className="list-header">
         <div className="header-left">
           <h2>Latest Confessions</h2>
@@ -103,7 +144,12 @@ const ConfessionList = () => {
       ) : (
         <div className="confessions-grid">
           {filteredConfessions.map((confession) => (
-            <ConfessionCard key={confession._id} confession={confession} />
+            <ConfessionCard 
+              key={confession._id} 
+              confession={confession}
+              // Pass socket for direct updates
+              socket={socket}
+            />
           ))}
         </div>
       )}

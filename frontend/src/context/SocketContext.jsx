@@ -45,22 +45,33 @@ export const SocketProvider = ({ children }) => {
       });
     });
 
-    // ✅ YAHAN ADD KARNA HAI (line 42-58)
+    // ✅ FIXED: Proper ID comparison
     newSocket.on('update_likes', (updatedConfession) => {
       console.log('❤️ Like update received:', updatedConfession);
       
-      // ✅ CORRECTED: Proper state update
-      setConfessions(prev =>
-        prev.map(conf =>
-          conf._id === updatedConfession._id
-            ? { 
-                ...conf, 
-                likes: updatedConfession.likes,
-                reactions: updatedConfession.reactions || conf.reactions
-              }
-            : conf
-        )
-      );
+      // Convert IDs to string for comparison
+      const updatedId = updatedConfession._id?.toString();
+      
+      setConfessions(prev => {
+        const updated = prev.map(conf => {
+          const confId = conf._id?.toString();
+          if (confId === updatedId) {
+            console.log(`✅ Found matching confession: ${confId}`);
+            return { 
+              ...conf, 
+              likes: updatedConfession.likes,
+              reactions: updatedConfession.reactions || conf.reactions
+            };
+          }
+          return conf;
+        });
+        
+        // Log for debugging
+        const changed = JSON.stringify(prev) !== JSON.stringify(updated);
+        console.log('State updated?', changed);
+        
+        return updated;
+      });
       
       toast.success('Someone liked a confession! ❤️', {
         duration: 2000,
@@ -69,15 +80,20 @@ export const SocketProvider = ({ children }) => {
 
     newSocket.on('reaction_update', (updatedConfession) => {
       console.log('😄 Reaction update received:', updatedConfession);
+      
+      const updatedId = updatedConfession._id?.toString();
+      
       setConfessions(prev =>
-        prev.map(conf =>
-          conf._id === updatedConfession._id
-            ? { 
-                ...conf, 
-                reactions: updatedConfession.reactions 
-              }
-            : conf
-        )
+        prev.map(conf => {
+          const confId = conf._id?.toString();
+          if (confId === updatedId) {
+            return { 
+              ...conf, 
+              reactions: updatedConfession.reactions 
+            };
+          }
+          return conf;
+        })
       );
     });
 
@@ -98,7 +114,7 @@ export const SocketProvider = ({ children }) => {
       console.error('Socket error:', error);
     });
 
-    // ✅ Debugging के लिए (optional)
+    // ✅ Debugging के लिए
     newSocket.onAny((event, ...args) => {
       console.log(`📡 Socket Event [${event}]:`, args);
     });

@@ -65,12 +65,11 @@ exports.createConfession = async (req, res) => {
 };
 
 
-//This is used to like handle the like request
 exports.likeConfession = async (req, res) => {
-  try{
+  try {
     const confession = await Confession.findById(req.params.id);
 
-    if(!confession) {
+    if (!confession) {
       return res.status(404).json({
         error: "Confession not found"
       });
@@ -79,13 +78,26 @@ exports.likeConfession = async (req, res) => {
     confession.likes += 1;
     const updatedConfession = await confession.save();
 
-    // Broadcast to ALL connected clients
-    req.io.emit("update_likes", updatedConfession);
-    return res.status(200).json(updatedConfession);
+    // ✅ Convert to plain JavaScript object
+    const confessionData = {
+      _id: updatedConfession._id.toString(), // Ensure ID is string
+      text: updatedConfession.text,
+      category: updatedConfession.category,
+      likes: updatedConfession.likes,
+      reactions: updatedConfession.reactions,
+      createdAt: updatedConfession.createdAt,
+      updatedAt: updatedConfession.updatedAt
+    };
 
+    // ✅ Broadcast to ALL connected clients
+    req.io.emit("update_likes", confessionData);
+    
+    console.log('📢 Emitting update_likes:', confessionData._id, 'likes:', confessionData.likes);
+    
+    return res.status(200).json(confessionData);
   }
-  catch(error) {
-    console.error("Fetch error", error);
+  catch (error) {
+    console.error("Like error", error);
     return res.status(500).json({
       error: "Failed to like confession"
     });
