@@ -48,7 +48,7 @@ exports.createConfession = async (req, res) => {
 
     const newConfession = await Confession.create({
       text: text.trim(),
-      category: category // ✅ category save karo
+      category: category 
     });
 
     // Used socket.io for realtime updates
