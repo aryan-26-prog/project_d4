@@ -207,7 +207,7 @@ PORT=5000
 <h2>👨‍💻 Author</h2>
 <p>
   <strong>Aryan Dhiman</strong><br />
-  Full Stack Developer<br />
+  Aspiring Full Stack Developer<br />
   🌐 Live Project:
   <a href="https://confessions-tau.vercel.app/" target="_blank">
     https://confessions-tau.vercel.app/
