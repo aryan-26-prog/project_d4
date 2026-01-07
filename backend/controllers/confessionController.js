@@ -80,7 +80,7 @@ exports.likeConfession = async (req, res) => {
     await confession.save();
 
     //Used socket.io for realtime like updates
-    req.io.emit("Update confession likes", confession);
+    req.io.emit("update_likes", confession);
     return res.status(201).json(confession)
 
   }
