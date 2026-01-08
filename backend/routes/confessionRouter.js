@@ -32,6 +32,4 @@ confessionRouter.get("/trending", async (req, res) => {
   }
 });
 
-
-
 module.exports = confessionRouter;

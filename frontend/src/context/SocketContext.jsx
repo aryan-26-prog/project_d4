@@ -126,7 +126,7 @@ export const SocketProvider = ({ children }) => {
     socket,
     confessions,
     setConfessions,
-    isConnected, // ✅ isConnected को export किया
+    isConnected, 
   };
 
   return (
