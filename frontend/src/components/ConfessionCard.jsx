@@ -15,7 +15,7 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
   const [isReacting, setIsReacting] = useState('');
   const [isTrending, setIsTrending] = useState(false);
 
-  // Category color mapping
+  // Category color mapping (same theme)
   const categoryColors = {
     'GENERAL': '#4299e1',
     'LOVE': '#ed64a6',
@@ -33,14 +33,13 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
         (confession.reactions ? 
           Object.values(confession.reactions).reduce((a, b) => a + b, 0) : 0);
       
-      // Trending if likes > 50 OR total interactions > 100
       setIsTrending((confession.likes || 0) > 50 || totalInteractions > 100);
     };
 
     checkTrending();
   }, [confession]);
 
-  // Listen for updates
+  // Listen for socket updates
   useEffect(() => {
     if (!socket) return;
 
@@ -66,6 +65,7 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
     };
   }, [socket, confession._id]);
 
+  // Update when initial confession changes
   useEffect(() => {
     setConfession(initialConfession);
   }, [initialConfession]);
@@ -75,12 +75,14 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
     
     try {
       setIsLiking(true);
+      
+      // Temporarily disable optimistic update to fix double counting
+      // Only call API, socket will update automatically
       await confessionAPI.like(confession._id);
       
-      setConfession(prev => ({
-        ...prev,
-        likes: prev.likes + 1
-      }));
+      // Socket event will handle the update
+      // So don't update state here
+      
     } catch (error) {
       console.error('Like error:', error);
     } finally {
@@ -95,13 +97,8 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
       setIsReacting(type);
       await confessionAPI.react(confession._id, type);
       
-      setConfession(prev => ({
-        ...prev,
-        reactions: {
-          ...prev.reactions,
-          [type]: (prev.reactions[type] || 0) + 1
-        }
-      }));
+      // Socket event will handle the update
+      
     } catch (error) {
       console.error('Reaction error:', error);
     } finally {
@@ -129,7 +126,6 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
   return (
     <div className="confession-card">
       <div className="card-header">
-        {/* Category badge with color */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <span 
             className="category-badge"
@@ -142,7 +138,6 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
             {confession.category}
           </span>
           
-          {/* Trending badge - shown in header */}
           {isTrending && (
             <div className="trending-badge">
               <FiTrendingUp style={{ fontSize: '14px' }} />
@@ -160,7 +155,6 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
       
       <div className="card-footer">
         <div className="interactions">
-          {/* Like Button */}
           <button 
             onClick={handleLike} 
             className={`like-btn ${isLiking ? 'liking' : ''}`}
@@ -170,7 +164,6 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
             <span>{confession.likes || 0}</span>
           </button>
           
-          {/* Reactions */}
           <div className="reaction-buttons">
             {reactionIcons.map(({ type, icon, label, color }) => (
               <button
