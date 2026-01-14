@@ -1,5 +1,3 @@
-const { json } = require("express");
-const confession = require("../models/confession");
 const Confession = require("../models/confession");
 
 const BadWordsFilter = require("bad-words");
