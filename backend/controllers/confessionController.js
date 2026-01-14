@@ -78,7 +78,6 @@ exports.likeConfession = async (req, res) => {
     confession.likes += 1;
     const updatedConfession = await confession.save();
 
-    // ✅ Convert to plain JavaScript object
     const confessionData = {
       _id: updatedConfession._id.toString(), // Ensure ID is string
       text: updatedConfession.text,
@@ -89,10 +88,9 @@ exports.likeConfession = async (req, res) => {
       updatedAt: updatedConfession.updatedAt
     };
 
-    // ✅ Broadcast to ALL connected clients
     req.io.emit("update_likes", confessionData);
     
-    console.log('📢 Emitting update_likes:', confessionData._id, 'likes:', confessionData.likes);
+    console.log('Emitting update_likes:', confessionData._id, 'likes:', confessionData.likes);
     
     return res.status(200).json(confessionData);
   }

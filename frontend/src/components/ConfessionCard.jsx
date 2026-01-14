@@ -189,7 +189,7 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .card-header {
           display: flex;
           justify-content: space-between;

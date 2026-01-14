@@ -10,7 +10,7 @@ const api = axios.create({
   },
 });
 
-// Add request interceptor for debugging
+// Add request for debugging
 api.interceptors.request.use(
   config => {
     console.log('Making request to:', config.url);
@@ -22,7 +22,7 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor for debugging
+// Add response for debugging
 api.interceptors.response.use(
   response => {
     console.log('Response from:', response.config.url, response.data);

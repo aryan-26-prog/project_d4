@@ -13,7 +13,7 @@ const ConfessionList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState('latest');
 
-  // ✅ Add socket listeners in ConfessionList itself
+  // Add socket listeners in ConfessionList itself
   useEffect(() => {
     if (!socket) return;
 
@@ -142,7 +142,7 @@ const ConfessionList = () => {
             <ConfessionCard 
               key={confession._id} 
               confession={confession}
-              // ✅ Pass socket as prop for better updates
+              // Pass socket as prop for better updates
               socket={socket}
             />
           ))}

@@ -53,7 +53,7 @@ export const SocketProvider = ({ children }) => {
         const updated = prev.map(conf => {
           const confId = conf._id?.toString();
           if (confId === updatedId) {
-            console.log(`✅ Found matching confession: ${confId}`);
+            console.log(`Found matching confession: ${confId}`);
             return { 
               ...conf, 
               likes: updatedConfession.likes,
@@ -75,7 +75,7 @@ export const SocketProvider = ({ children }) => {
     });
 
     newSocket.on('reaction_update', (updatedConfession) => {
-      console.log('😄 Reaction update received:', updatedConfession);
+      console.log('Reaction update received:', updatedConfession);
       
       const updatedId = updatedConfession._id?.toString();
       
@@ -111,7 +111,7 @@ export const SocketProvider = ({ children }) => {
     });
 
     newSocket.onAny((event, ...args) => {
-      console.log(`📡 Socket Event [${event}]:`, args);
+      console.log(`Socket Event [${event}]:`, args);
     });
 
     setSocket(newSocket);

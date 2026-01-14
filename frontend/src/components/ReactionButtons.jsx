@@ -18,7 +18,7 @@ const ReactionButtons = ({ confessionId, initialReactions }) => {
   });
   
   const [activeReaction, setActiveReaction] = useState(null);
-  const [userReactions, setUserReactions] = useState({}); // Track user's reactions
+  const [userReactions, setUserReactions] = useState({}); // It is used to Track user's reactions
 
   // Only 4 reaction types with shock replacing heart
   const reactionTypes = [
@@ -26,34 +26,34 @@ const ReactionButtons = ({ confessionId, initialReactions }) => {
       type: 'shock', 
       label: 'Shock', 
       icon: <FiZap />, 
-      color: '#FFD700', // Gold/Yellow for shock
+      color: '#FFD700', 
       emoji: '⚡'
     },
     { 
       type: 'laugh', 
       label: 'Laugh', 
       icon: <FiSmile />, 
-      color: '#ed8936', // Orange for laugh
+      color: '#ed8936', 
       emoji: '😂'
     },
     { 
       type: 'sad', 
       label: 'Sad', 
       icon: <FiFrown />, 
-      color: '#4299e1', // Blue for sad
+      color: '#4299e1', 
       emoji: '😢'
     },
     { 
       type: 'wow', 
       label: 'Wow', 
       icon: <FiMeh />, 
-      color: '#9f7aea', // Purple for wow
+      color: '#9f7aea', 
       emoji: '😲'
     }
   ];
 
   const handleReaction = async (type) => {
-    // If user already reacted with this type, remove it
+    // If user already reacted with this type, then remove it
     if (userReactions[type]) {
       setReactions(prev => ({
         ...prev,
