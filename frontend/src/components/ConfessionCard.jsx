@@ -76,12 +76,7 @@ const ConfessionCard = ({ confession: initialConfession, socket }) => {
     try {
       setIsLiking(true);
       
-      // Temporarily disable optimistic update to fix double counting
-      // Only call API, socket will update automatically
       await confessionAPI.like(confession._id);
-      
-      // Socket event will handle the update
-      // So don't update state here
       
     } catch (error) {
       console.error('Like error:', error);
